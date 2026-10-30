@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>חידון: אדריכלות קיני האורג</title>
+<style>
+:root{--bg:#eef6fb;--card:#fff;--ink:#12324a;--mut:#5b7488;--line:#c9dceb;--grid:rgba(30,110,170,.08);--ok:#17b26a;--bad:#ef4444;--ac:#2f80ed;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1b2a;--card:#162a3f;--ink:#e8f3fb;--mut:#9db6c9;--line:#2c4a66;--grid:rgba(120,190,255,.07)}}
+:root[data-theme="dark"]{--bg:#0d1b2a;--card:#162a3f;--ink:#e8f3fb;--mut:#9db6c9;--line:#2c4a66;--grid:rgba(120,190,255,.07)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Heebo","Assistant",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;min-height:100vh;
+background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;-webkit-user-select:none;user-select:none}
+.wrap{max-width:820px;margin:0 auto;padding:14px 14px 40px}
+header{text-align:center;padding:8px 0 4px}
+h1{font-size:clamp(22px,5vw,32px);margin:4px 0;letter-spacing:.3px}
+.sub{color:var(--mut);font-size:14px}
+.bar{display:flex;gap:6px;margin:12px 0}
+.bar i{flex:1;height:8px;border-radius:6px;background:var(--line);transition:.3s}
+.bar i.on{background:var(--ac)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 6px 18px rgba(20,60,100,.08)}
+.rt{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.rt .n{background:var(--ac);color:#fff;border-radius:50%;width:34px;height:34px;display:grid;place-items:center;font-weight:800;flex:none}
+.rt h2{font-size:clamp(17px,4vw,22px);margin:0}
+.hint{color:var(--mut);font-size:14px;margin:2px 0 12px}
+.targets{display:grid;gap:8px}
+.targets.two{grid-template-columns:1fr 1fr}
+.slot{border:2px dashed var(--ac);border-radius:14px;padding:8px 10px;min-height:56px;background:color-mix(in srgb,var(--ac) 7%,transparent);transition:.15s}
+.slot .lab{font-size:14px;line-height:1.35;color:var(--ink)}
+.slot .fill{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.slot.hot{background:color-mix(in srgb,var(--ac) 22%,transparent);transform:scale(1.015)}
+.slot.full{border-style:solid;border-color:var(--ok)}
+.slot.num{display:flex;align-items:center;gap:10px}
+.slot.num .no{background:var(--ac);color:#fff;border-radius:8px;min-width:30px;height:30px;display:grid;place-items:center;font-weight:800;flex:none}
+.slot.col .lab{font-weight:800;font-size:16px;text-align:center}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--ac) 6%,transparent);min-height:62px}
+.chip{background:var(--ac);color:#fff;font-weight:700;font-size:15px;padding:9px 14px;border-radius:12px;cursor:grab;touch-action:none;box-shadow:0 3px 0 rgba(0,0,0,.2);line-height:1.2}
+.chip.sel{outline:3px solid #ffb703;transform:translateY(-2px)}
+.chip.ok{background:var(--ok);cursor:default;box-shadow:none;font-size:14px;padding:6px 10px}
+.chip.ghost{position:fixed;z-index:99;pointer-events:none;opacity:.92;transform:scale(1.08) rotate(-2deg);box-shadow:0 10px 20px rgba(0,0,0,.3)}
+.chip.src{opacity:.25}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.slot.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,transparent)}
+.fact{margin-top:14px;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid var(--ok);font-size:15px}
+button.go{margin-top:14px;display:block;width:100%;border:0;border-radius:14px;padding:14px;font-size:18px;font-weight:800;color:#fff;background:var(--ac);cursor:pointer;font-family:inherit}
+.stat{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin:6px 2px 0}
+.end{text-align:center}
+.end .big{font-size:64px;font-weight:900;color:var(--ac)}
+.stars{font-size:38px;letter-spacing:4px}
+.hide{display:none}
+.credit{text-align:center;margin-top:22px;font-size:14px;font-weight:700;color:var(--mut)}
+.credit span{color:var(--ac)}
+@media (max-width:480px){.targets.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div style="font-size:38px">🐦🧬🧵</div>
+<h1>חידון: אדריכלות קיני האורג</h1>
+<div class="sub">גררו כל כרטיסייה למקום הנכון (או הקישו על כרטיסייה ואז על היעד)</div>
+</header>
+<div class="bar" id="bar"></div>
+<div class="card" id="game"></div>
+<div class="stat"><span id="s1"></span><span id="s2"></span></div>
+<div class="credit">עריכה: <span>מילכה ברקו גרש</span></div>
+</div>
+<script>
+var COLORS=["#2f80ed","#9b51e0","#f2994a","#00a896"];
+var R=[
+{t:"אנטומיה של קן",h:"התאימו כל חלק בקן לתיאור שלו.",type:"match",
+ fact:"הקן נתלה מענף ונאחז רק בקשרים ובאריגה, בלי דבק ובלי כלים.",
+ items:[["נקודת העיגון","החיבור הקריטי לענף, הקובע את יציבות המבנה כולו."],
+ ["שלד ראשוני","טבעת הלולאות הראשונה, היוצרת את תבנית המבנה."],
+ ["דפנות הקן","רצועות צפופות ושזורות המגנות מפני הסביבה."],
+ ["חלל פנימי","אזור הקינון הבטוח להטלת ביצים."],
+ ["פתח כניסה","ממוקם בתחתית המבנה כדי להקשות על כניסת טורפים."]]},
+{t:"אלגוריתם הייצור",h:"סדרו את שלבי בניית הקן, משלב 1 עד שלב 8.",type:"order",
+ fact:"כל שלב נשען על הקודם: קודם עוגן, אחר כך שלד, דפנות, פתח, ורק בסוף בקרת איכות.",
+ items:["איתור מיקום","רכש חומרים","הלולאה הראשונה","אריגה והשחלה","סגירת הדפנות","פתח הכניסה","בקרת איכות","מקצה שיפורים"]},
+{t:"שני סוגי אורגים",h:"גררו כל מאפיין לעמודה של הציפור שלו.",type:"bucket",
+ fact:"אורג דרומי מסווה: פרויקט אישי של הזכר. אורג חברתי: בניין דירות משותף שנבנה על ידי קהילה.",
+ cols:["אורג דרומי מסווה","אורג חברתי"],
+ items:[["בית פרטי עונתי",0],["זכר בודד בונה",0],["חיזור וברירה זוויגית",0],["קשרים מכניים בלי דבק",0],
+ ["בניין דירות רב־דורי",1],["עבודה שיתופית של הקהילה",1],["בידוד תרמי בקלהארי",1],["עשרות עד מאות תאים",1]]},
+{t:"S.T.E.A.M בפעולה",h:"התאימו כל אות לתחום ולתיאור שלו.",type:"match",
+ fact:"הקן הוא מודל שלם: מדע, טכנולוגיה, הנדסה, אמנות ומתמטיקה בבניין אחד.",
+ items:[["S – מדע","הבנת התנהגות הציפור, תכונות חומרים צמחיים וכוחות חיכוך."],
+ ["T – טכנולוגיה","פיתוח חומרים מרוכבים ושימוש בחומרים מתכלים."],
+ ["E – הנדסה","חלוקת עומסים, יצירת נקודת עיגון ובניית חלל תלוי ללא דבק."],
+ ["A – אמנות","סימטריה, עיצוב תלת־ממדי אסתטי ושילוב של יופי ושימושיות."],
+ ["M – מתמטיקה","חישוב מספר הרצועות, מדידת זוויות פתח הכניסה ויחסי עומס־משקל."]]}
+];
+var ri=0,good=0,bad=0,total=0,done=0,need=0,sel=null,locked=false;
+R.forEach(function(r){total+=r.items.length});
+var G=document.getElementById("game"),bar=document.getElementById("bar");
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function el(c,t,p){var e=document.createElement("div");e.className=c;if(t!=null)e.textContent=t;if(p)p.appendChild(e);return e}
+function stats(){document.getElementById("s1").textContent="✔ "+good+" נכון";document.getElementById("s2").textContent="✖ "+bad+" טעויות"}
+function render(){
+ var r=R[ri],ac=COLORS[ri%COLORS.length];document.documentElement.style.setProperty("--ac",ac);
+ bar.innerHTML="";R.forEach(function(_,i){var b=document.createElement("i");if(i<=ri)b.className="on";bar.appendChild(b)});
+ G.innerHTML="";done=0;sel=null;locked=false;
+ var rt=el("rt",null,G);el("n",ri+1,rt);var h=document.createElement("h2");h.textContent=r.t;rt.appendChild(h);
+ el("hint",r.h,G);
+ var tg=el("targets"+(r.type==="bucket"?" two":""),null,G),chips=[];
+ if(r.type==="match"){r.items.forEach(function(it,i){var s=el("slot",null,tg);s.dataset.id=i;el("lab",it[1],s);el("fill",null,s);chips.push([it[0],i])})}
+ if(r.type==="order"){r.items.forEach(function(it,i){var s=el("slot num",null,tg);s.dataset.id=i;el("no",i+1,s);el("fill",null,s);chips.push([it,i])})}
+ if(r.type==="bucket"){r.cols.forEach(function(c,i){var s=el("slot col",null,tg);s.dataset.id=i;s.dataset.multi=1;el("lab",c,s);el("fill",null,s)});r.items.forEach(function(it){chips.push([it[0],it[1]])})}
+ need=chips.length;
+ var bank=el("bank",null,G);bank.id="bank";
+ shuffle(chips).forEach(function(c){var ch=el("chip",c[0],bank);ch.dataset.t=c[1];ch.addEventListener("pointerdown",down)});
+ stats();
+}
+function place(ch,slot){
+ if(locked||ch.classList.contains("ok"))return;
+ var ok=ch.dataset.t===slot.dataset.id&&(slot.dataset.multi||!slot.querySelector(".chip"));
+ if(ok){
+  ch.classList.remove("sel","src");ch.classList.add("ok");slot.querySelector(".fill").appendChild(ch);
+  ch.removeEventListener("pointerdown",down);slot.classList.add("full");good++;done++;sel=null;stats();
+  if(done===need)finish();
+ }else{
+  bad++;stats();slot.classList.add("bad","shake");ch.classList.add("shake");
+  setTimeout(function(){slot.classList.remove("bad","shake");ch.classList.remove("shake")},400);
+ }
+}
+function finish(){
+ locked=true;var r=R[ri];
+ var f=el("fact","🔬 "+r.fact,G);
+ var b=document.createElement("button");b.className="go";b.textContent=ri<R.length-1?"לשלב הבא ←":"לתוצאות 🏆";
+ b.onclick=function(){ri++;if(ri<R.length)render();else end()};G.appendChild(b);
+ f.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function end(){
+ var pct=Math.max(0,Math.round(100*total/(total+bad)));
+ var st=pct>=90?3:pct>=70?2:1;
+ document.documentElement.style.setProperty("--ac","#2f80ed");
+ G.innerHTML="";var d=el("end",null,G);
+ el("stars","⭐".repeat(st)+"☆".repeat(3-st),d);el("big",pct+"%",d);
+ el("hint",bad===0?"מושלם! אפס טעויות, אדריכלי טבע אמיתי.":"סיימתם עם "+bad+" טעויות. נסו שוב לשפר את הציון!",d);
+ var b=document.createElement("button");b.className="go";b.textContent="שחקו שוב 🔄";
+ b.onclick=function(){ri=0;good=0;bad=0;render()};d.appendChild(b);
+ for(var i=0;i<bar.children.length;i++)bar.children[i].className="on";
+}
+/* drag + tap */
+var gh=null,cur=null,sx=0,sy=0,moved=false,ox=0,oy=0;
+function down(e){
+ if(locked)return;e.preventDefault();cur=e.currentTarget;sx=e.clientX;sy=e.clientY;moved=false;
+ var rc=cur.getBoundingClientRect();ox=e.clientX-rc.left;oy=e.clientY-rc.top;
+ document.addEventListener("pointermove",move);document.addEventListener("pointerup",up);document.addEventListener("pointercancel",up);
+}
+function move(e){
+ if(!moved&&Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)<8)return;
+ if(!moved){moved=true;gh=cur.cloneNode(true);gh.className="chip ghost";gh.style.width=cur.offsetWidth+"px";document.body.appendChild(gh);cur.classList.add("src")}
+ gh.style.left=(e.clientX-ox)+"px";gh.style.top=(e.clientY-oy)+"px";
+ var s=slotAt(e.clientX,e.clientY);
+ document.querySelectorAll(".slot.hot").forEach(function(x){x.classList.remove("hot")});if(s)s.classList.add("hot");
+}
+function slotAt(x,y){var t=document.elementFromPoint(x,y);return t?t.closest(".slot"):null}
+function up(e){
+ document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);document.removeEventListener("pointercancel",up);
+ document.querySelectorAll(".slot.hot").forEach(function(x){x.classList.remove("hot")});
+ var ch=cur;
+ if(moved){
+  if(gh){gh.remove();gh=null}ch.classList.remove("src");
+  var s=slotAt(e.clientX,e.clientY);if(s)place(ch,s);
+ }else{
+  if(sel===ch){ch.classList.remove("sel");sel=null}
+  else{if(sel)sel.classList.remove("sel");sel=ch;ch.classList.add("sel")}
+ }
+}
+G.addEventListener("click",function(e){
+ var s=e.target.closest(".slot");if(s&&sel&&!locked){var c=sel;c.classList.remove("sel");sel=null;place(c,s)}
+});
+render();
+</script>
+</body>
+</html>
